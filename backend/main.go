@@ -3,12 +3,34 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
+
 )
 
-var port = "8080"
+var port string
+
+func init(){
+
+	// first read .env file and put it to env
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Fatal problem during initialization: %v\n", err)
+		os.Exit(1)
+	}
+
+	p, ok := os.LookupEnv("HTTP_PORT")
+	if !ok {
+		log.Print("No http port in .env file, default 8000 taken")
+		p = ":8080"
+	}
+
+	port = p
+
+}
+
 
 func main() {
 	log.Printf("Main started")

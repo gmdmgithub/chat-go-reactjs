@@ -1,14 +1,14 @@
 Hi Gophers!
 
-# Chat app - backeng golang, front-end reackt js 
+# Chat app - backeng golang, front-end react js 
 
 ## for golang created with  go modules 
 
 1. Create go modules
 
 ```bash
-mkdir backed & cd backend
-go mog init
+$ mkdir backed & cd backend
+$ go mog init
 ```
 
 2. Create a scaffold project in go (with mux) and build it
@@ -40,7 +40,7 @@ $ docker build -t <image_name> .
 
 ``` bash
 $ docker images
-to remove image
+# to remove image
 $ docker rmi <image_name>  (if force necessary use '-f' flag)
 
 ```
@@ -48,34 +48,39 @@ $ docker rmi <image_name>  (if force necessary use '-f' flag)
 6. Run the app in a docker (first in interactive mode) first port is port to be expose in docker second default in app
 
 ```bash
-docker run -p 8080:8080 -it <image_name>
+$ docker run -p 8080:8080 -it <image_name>
+# Test
+$ curl http://localhost:8080
+OK
 ```
 
 7. Run in detatched mode (background)
 
 ``` bush
-docker run -p 8080:8080 -d <image_name>
+$ docker run -p 8080:8080 -d <image_name>
 ```
 
 8. Check docker - process should be in the background
 
 ```bash
-docker ps
+$ docker ps
 ```
 
 9. Other useful commands
-a. Get logs of the container
-docker logs <containerId>
 
-b.Stop running container
-docker stop <containerId>
+```bash
+#a. Get logs of the container
+$ docker logs <containerId>
 
-c.Restart exited container
-docker restart <containerId>
+#b.Stop running container
+$ docker stop <containerId>
 
-d.Remove stopped container
-docker rm <containerId>
+#c.Restart exited container
+$ docker restart <containerId>
 
+#d.Remove stopped container
+$ docker rm <containerId>
+```
 
 
 ## Version
