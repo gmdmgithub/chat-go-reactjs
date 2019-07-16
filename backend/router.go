@@ -42,13 +42,14 @@ func router() http.Handler {
 
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Host)
+	log.Println("new connection from host", r.Host)
+	defer log.Println("websocket endpoint end", r.Host)
 
 	// upgrade this connection to a WebSocket
 	// connection
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		log.Println("Upgrader problem", err)
 		return
 	}
 	// listen indefinitely for new messages coming
@@ -63,14 +64,14 @@ func reader(conn *websocket.Conn) {
 		// read in a message
 		messageType, p, err := conn.ReadMessage()
 		if err != nil {
-			log.Println(err)
+			log.Println("Problem in reading message", err)
 			return
 		}
 		// print out that message for clarity
-		log.Println(string(p))
+		log.Printf("Message is processed %s and type is %v", string(p), messageType)
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
+			log.Println("Problem in writing message", err)
 			return
 		}
 
