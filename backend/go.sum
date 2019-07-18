@@ -1,3 +1,5 @@
+github.com/gmdmgithub/chat-go-reactjs v0.0.0-20190718090539-b5f2091cc487 h1:yxqfHGuz3sl/kC7vpdCfLclk8oYzNS5HITu0m1VPczA=
+github.com/gmdmgithub/chat-go-reactjs/backend v0.0.0-20190718090539-b5f2091cc487 h1:X4KrxxNNqMwP1nMYBaih/7nEaOEVQUWPYkV9i8bx3g0=
 github.com/gorilla/mux v1.7.3 h1:gnP5JzjVOuiZD07fKKToCAOjS0yOpj/qPETTXCCS6hw=
 github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=

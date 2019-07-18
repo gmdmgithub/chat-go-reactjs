@@ -6,25 +6,17 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gmdmgithub/chat-go-reactjs/backend/pkg/websocket"
+
 	"github.com/gorilla/mux"
-
-	"github.com/gorilla/websocket"
 )
-
-// It is need to define an Upgrader, this will require a Read and Write buffer size
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-
-	// We'll need to check the origin of our connection
-	// this will allow us to make requests from our React
-	// development server to here.
-	// For now, we'll do no checking and just allow any connection
-	CheckOrigin: func(r *http.Request) bool { return true },
-}
 
 // main router to serve pages
 func router() http.Handler {
+
+	pool := websocket.NewPool()
+	go pool.Start()
+	
 	r := mux.NewRouter()
 	// three way to implement handlefunc
 	r.Path("/greeting").Methods(http.MethodGet).HandlerFunc(greet)
@@ -36,30 +28,32 @@ func router() http.Handler {
 	})
 	// three way to implement handlefunc
 
-	r.HandleFunc("/ws", serveWs)
+	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+        serveWs(pool, w, r)
+    })
 
 	return r
 }
 
 // define our WebSocket endpoint
-func serveWs(w http.ResponseWriter, r *http.Request) {
+func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	log.Println("new connection from host", r.Host)
 	defer log.Println("websocket endpoint end", r.Host)
 
 	// upgrade this connection to a WebSocket
 	// connection
-	ws, err := upgrader.Upgrade(w, r, nil)
+	conn, err := websocket.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("Upgrader problem", err)
 		return
 	}
-	// create goroutine for writing to every single connection
-	go writer(ws)
+	client := &websocket.Client{
+        Conn: conn,
+        Pool: pool,
+    }
 
-	// listen indefinitely for new messages coming
-	// through on our WebSocket connection
-	reader(ws)
-
+    pool.Register <- client
+    client.Read()
 }
 
 // define a reader which will listen for
