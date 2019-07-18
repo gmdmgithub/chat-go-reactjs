@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -52,9 +53,13 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		log.Println("Upgrader problem", err)
 		return
 	}
+	// create goroutine for writing to every single connection
+	go writer(ws)
+
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
 	reader(ws)
+
 }
 
 // define a reader which will listen for
@@ -75,6 +80,30 @@ func reader(conn *websocket.Conn) {
 			return
 		}
 
+	}
+}
+
+func writer(conn *websocket.Conn) {
+	for {
+		fmt.Println("Sending")
+		messageType, r, err := conn.NextReader()
+		if err != nil {
+			log.Println("Problem in nextreader message", err)
+			return
+		}
+		w, err := conn.NextWriter(messageType)
+		if err != nil {
+			log.Println("Problem in nextwriter message", err)
+			return
+		}
+		if _, err := io.Copy(w, r); err != nil {
+			log.Println("Problem in copy the writer to reader message", err)
+			return
+		}
+		if err := w.Close(); err != nil {
+			log.Println("Problem in closing the writer", err)
+			return
+		}
 	}
 }
 
