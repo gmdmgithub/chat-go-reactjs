@@ -9,7 +9,7 @@ import (
 
 //Client struct to keep client data
 type Client struct {
-	ID   string          `json:"id,omitempty"`
+	ID   int             `json:"id,omitempty"`
 	Conn *websocket.Conn `json:"conn,omitempty"`
 	Pool *Pool           `json:"pool,omitempty"`
 }

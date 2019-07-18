@@ -1,12 +1,10 @@
 package main
 
 import (
+	"chat-go-reactjs/pkg/websocket"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
-
-	"github.com/gmdmgithub/chat-go-reactjs/backend/pkg/websocket"
 
 	"github.com/gorilla/mux"
 )
@@ -16,7 +14,7 @@ func router() http.Handler {
 
 	pool := websocket.NewPool()
 	go pool.Start()
-	
+
 	r := mux.NewRouter()
 	// three way to implement handlefunc
 	r.Path("/greeting").Methods(http.MethodGet).HandlerFunc(greet)
@@ -29,8 +27,8 @@ func router() http.Handler {
 	// three way to implement handlefunc
 
 	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-        serveWs(pool, w, r)
-    })
+		serveWs(pool, w, r)
+	})
 
 	return r
 }
@@ -42,63 +40,21 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 	// upgrade this connection to a WebSocket
 	// connection
-	conn, err := websocket.Upgrade(w, r, nil)
+	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
 		log.Println("Upgrader problem", err)
 		return
 	}
+
 	client := &websocket.Client{
-        Conn: conn,
-        Pool: pool,
-    }
-
-    pool.Register <- client
-    client.Read()
-}
-
-// define a reader which will listen for
-// new messages being sent to our WebSocket endpoint
-func reader(conn *websocket.Conn) {
-	for {
-		// read in a message
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println("Problem in reading message", err)
-			return
-		}
-		// print out that message for clarity
-		log.Printf("Message is processed %s and type is %v", string(p), messageType)
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println("Problem in writing message", err)
-			return
-		}
-
+		ID:   clnID,
+		Conn: conn,
+		Pool: pool,
 	}
-}
+	clnID = clnID + 1
 
-func writer(conn *websocket.Conn) {
-	for {
-		fmt.Println("Sending")
-		messageType, r, err := conn.NextReader()
-		if err != nil {
-			log.Println("Problem in nextreader message", err)
-			return
-		}
-		w, err := conn.NextWriter(messageType)
-		if err != nil {
-			log.Println("Problem in nextwriter message", err)
-			return
-		}
-		if _, err := io.Copy(w, r); err != nil {
-			log.Println("Problem in copy the writer to reader message", err)
-			return
-		}
-		if err := w.Close(); err != nil {
-			log.Println("Problem in closing the writer", err)
-			return
-		}
-	}
+	pool.Register <- client
+	client.Read()
 }
 
 // homePage - just simple home page

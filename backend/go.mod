@@ -5,3 +5,5 @@ require (
 	github.com/gorilla/websocket v1.4.0
 	github.com/joho/godotenv v1.3.0
 )
+
+replace chat-go-reactjs/pkg/websocket v0.0.0 => ./pkg/websocket

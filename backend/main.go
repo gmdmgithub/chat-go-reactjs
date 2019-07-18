@@ -11,7 +11,13 @@ import (
 
 var port string
 
+var clnID int
+
 func init() {
+	log.Println("Init main")
+
+	clnID =1
+
 	// first read .env file and put it to env
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Fatal problem during initialization: %v\n", err)
@@ -29,7 +35,7 @@ func init() {
 }
 
 func main() {
-	log.Printf("Main started")
+	log.Println("Main started")
 	defer log.Printf("End of main!")
 
 	fmt.Printf("Server starting on port %s\n", port)
