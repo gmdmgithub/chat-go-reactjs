@@ -7,3 +7,10 @@
   color: #fff;
   background: #090a61;
 }
+
+.App .AppBtn{
+  min-height: 200px;
+   display: flex;  
+  justify-content: center;
+  align-items: center;
+}

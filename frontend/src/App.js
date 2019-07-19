@@ -3,14 +3,12 @@ import "./App.css";
 import { connect, sendMsg } from "./api";
 import Header from './components/Header/Header';
 import ChatHistory from './components/ChatHistory/ChatHistory';
+import ChatInput from './components/ChatInput/ChatInput';
 
 class App extends Component {
 
   state = {
     chatHistory:[
-      {
-        data:"how are you"
-      }
     ]
   };
 
@@ -24,9 +22,15 @@ class App extends Component {
     });
   }
 
-  send() {
-    console.log("Sending hello to the backend");
-    sendMsg("hello - react frontend");
+  send(event) {
+    if(event.keyCode === 13) {
+      sendMsg(event.target.value);
+      event.target.value = "";
+    }
+  }
+  sendOnClick(){
+    //get a user data
+    sendMsg("Hi there")
   }
 
   render() {
@@ -34,7 +38,10 @@ class App extends Component {
       <div className="App">
         <Header />
         <ChatHistory chatHistory={this.state.chatHistory} />
-        <button className="appButton" onClick={this.send}>Send message!</button>
+        <ChatInput send={this.send} />
+        <div className="AppBtn">
+          <button className="appButton" onClick={this.sendOnClick}> Send some message!</button>
+        </div>
       </div>
     );
   }
