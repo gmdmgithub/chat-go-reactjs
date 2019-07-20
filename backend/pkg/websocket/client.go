@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -16,8 +17,9 @@ type Client struct {
 
 // Message - struct to keep messages
 type Message struct {
-	Type int    `json:"type"`
-	Body string `json:"body"`
+	Type  int    `json:"type,omitempty"`
+	Body  string `json:"body,omitempty"`
+	UsrID int    `json:"usr_id,omitempty"`
 }
 
 //Read - method to read client messages
@@ -33,7 +35,20 @@ func (c *Client) Read() {
 			log.Println(err)
 			return
 		}
-		message := Message{Type: messageType, Body: string(p)}
+		//best is to send json - simplify using map
+		pMap := make(map[string]interface{})
+
+		err = json.Unmarshal(p, &pMap)
+		if err != nil {
+			log.Println(err)
+			// return
+		}
+		log.Printf("body is %+v", pMap)
+
+		data := pMap["value"].(string)
+		ID := int(pMap["ID"].(float64)) //default is float 64 as number form front-end, switch statement could be used
+
+		message := Message{Type: messageType, Body: data, UsrID: ID}
 		c.Pool.Broadcast <- message
 		fmt.Printf("Message Received: %+v\n", message)
 	}

@@ -33,7 +33,11 @@ func (pool *Pool) Start() {
 			for cl, _ := range pool.Clients {
 				log.Printf("Client joined %+v", cl)
 
-				cl.Conn.WriteJSON(Message{Type: 1, Body: fmt.Sprintf("New User Joined... ID=%v", client.ID)})
+				cl.Conn.WriteJSON(Message{
+					Type:  1,
+					Body:  fmt.Sprintf("New User Joined... ID=%v", client.ID),
+					UsrID: client.ID,
+				})
 			}
 			break
 		case client := <-pool.Unregister:
