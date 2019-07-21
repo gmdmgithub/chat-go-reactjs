@@ -17,11 +17,12 @@ class App extends Component {
   }
 
   // special method for react after component is rendered - opposite method is: componentWillUnmount(){}
-  componentDidMount() {
+  componentDidMount = () => {
     connect((msg) => {
       const data = JSON.parse(msg.data)
-      console.log("componentDidMount - New Message", data.usr_id)
-      this.userId = data.usr_id;
+      console.log("componentDidMount - New Message", data.usr_id, this.state.userId)
+      if(this.state.userId !== null) 
+        data.usr_id = this.state.userId ;
       
       this.setState(state => ({
         chatHistory: [...state.chatHistory, msg],
