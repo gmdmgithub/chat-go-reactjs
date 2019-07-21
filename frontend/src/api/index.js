@@ -1,10 +1,8 @@
 // api/index.js
 const socket = new WebSocket("ws://localhost:8080/ws");
 
-let userId = null;
-
-let connect = cb => {
-    console.log("connecting");
+const connect = cb => {
+    console.log("connecting ...");
 
     socket.onopen = () => {
         console.log("Successfully Connected");
@@ -12,25 +10,20 @@ let connect = cb => {
 
     socket.onmessage = msg => {
         const data = JSON.parse(msg.data)
-        console.log("Message is: ",data);
-        if(data.usr_id){
-            userId = data.usr_id;
-            console.log(`Get client ID as ${userId}`);
-            
-        }
+        console.log("Message is: ", data);
         cb(msg);
     };
 
     socket.onclose = event => {
-        console.log("Socket Closed Connection: ", event, userId);
+        console.log("Socket Closed Connection: ", event);
     };
 
     socket.onerror = error => {
-        console.log("Socket Error: ", error, userId);
+        console.log("Socket Error: ", error);
     };
 };
 
-let sendMsg = (msg, id) => {
+const sendMsg = (msg, id) => {
 
     const message = {
         value: msg,
@@ -42,6 +35,5 @@ let sendMsg = (msg, id) => {
 
 export {
     connect,
-    sendMsg,
-    userId
+    sendMsg
 };

@@ -7,7 +7,6 @@ class ChatHistory extends Component {
     // const messages = this.props.chatHistory.map((msg, index) => (
     //   <p key={index}> <Message message={msg.data} /></p>
     // ));
-    console.log(this.props.chatHistory);
     const messages = this.props.chatHistory.map((msg, index) => <Message key={index} message={msg.data} />);
 
     return (
