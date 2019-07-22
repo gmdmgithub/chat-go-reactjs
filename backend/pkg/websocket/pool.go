@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 )
-
+// Poll - struct to nahdle connections as a channels
 type Pool struct {
 	Register   chan *Client
 	Unregister chan *Client
@@ -43,8 +43,12 @@ func (pool *Pool) Start() {
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			for client, _ := range pool.Clients {
-				client.Conn.WriteJSON(Message{Type: 1, Body: fmt.Sprintf("User Disconnected... %v", client.ID)})
+			for cl, _ := range pool.Clients {
+				cl.Conn.WriteJSON(Message{
+					Type: 1, 
+					Body: fmt.Sprintf("User Disconnected... %v", client.ID),
+					UsrID: client.ID,
+				})
 			}
 			break
 		case message := <-pool.Broadcast:
