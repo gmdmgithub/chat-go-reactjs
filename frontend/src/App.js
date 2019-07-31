@@ -16,7 +16,7 @@ class App extends Component {
     // this.send = this.send.bind(this);
   }
 
-  // special method for react after component is rendered - opposite method is: componentWillUnmount(){}
+  // special method for react after component is rendered - opposite method is: componentWillUnmounted(){}
   componentDidMount = () => {
     connect((msg) => {
       const data = JSON.parse(msg.data)

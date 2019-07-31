@@ -9,7 +9,7 @@ const connect = cb => {
     };
 
     socket.onmessage = msg => {
-        const data = JSON.parse(msg.data)
+        const data = JSON.parse(msg.data);
         console.log("Message is: ", data);
         cb(msg);
     };
@@ -28,7 +28,7 @@ const sendMsg = (msg, id) => {
     const message = {
         value: msg,
         ID: id
-    }
+    };
     console.log("sending msg: ", JSON.stringify(message));
     socket.send(JSON.stringify(message));
 };

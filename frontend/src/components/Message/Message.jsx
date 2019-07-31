@@ -9,13 +9,10 @@ class Message extends Component {
         let temp = '';
 
         if (this.props.message) {
-            console.log("My message to parse is", this.props.message);
-
             try {
                 temp = JSON.parse(this.props.message);
-                console.log("My message after parse is", this.props.message);
             } catch (e) {
-                console.log(`Exception not a JSON message: ${e}`);
+                console.log(`Exception not a JSON message ${this.props.message} is: ${e}`);
             }
         }
         this.state = {
