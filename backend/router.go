@@ -42,8 +42,7 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	// connection
 	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
-		log.Println("Upgrader problem", err)
-		return
+		log.Fatal("Upgrader problem", err)
 	}
 
 	client := &websocket.Client{

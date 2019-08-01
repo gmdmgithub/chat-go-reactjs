@@ -16,7 +16,7 @@ var clnID int
 func init() {
 	log.Println("Init main")
 
-	clnID =1
+	clnID = 1
 
 	// first read .env file and put it to env
 	if err := godotenv.Load(); err != nil {
@@ -39,6 +39,6 @@ func main() {
 	defer log.Printf("End of main!")
 
 	fmt.Printf("Server starting on port %s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, router()))
+	log.Fatal(http.ListenAndServe(port, router()))
 
 }
