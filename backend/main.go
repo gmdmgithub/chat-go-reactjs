@@ -16,11 +16,11 @@ var clnID int
 func init() {
 	log.Println("Init main")
 
-	clnID = 1
+	clnID = 1 //till clients will be registered and taken form DB
 
 	// first read .env file and put it to env
 	if err := godotenv.Load(); err != nil {
-		log.Printf("Fatal problem during initialization: %v\n", err)
+		log.Printf("Fatal problem during initialization or no .env file: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -35,9 +35,8 @@ func init() {
 }
 
 func main() {
+	
 	log.Println("Main started")
-	defer log.Printf("End of main!")
-
 	fmt.Printf("Server starting on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, router()))
 

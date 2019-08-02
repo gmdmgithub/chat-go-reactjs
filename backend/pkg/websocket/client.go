@@ -25,6 +25,7 @@ type Message struct {
 //Read - method to read client messages
 func (c *Client) Read() {
 	defer func() {
+		log.Printf("connetion is closed %v", c)
 		c.Pool.Unregister <- c
 		c.Conn.Close()
 	}()
@@ -35,7 +36,7 @@ func (c *Client) Read() {
 			log.Println(err)
 			return
 		}
-		//best is to send json - simplify using map
+		//best is to send json - simplify using map - but also more flexible
 		pMap := make(map[string]interface{})
 
 		err = json.Unmarshal(p, &pMap)
